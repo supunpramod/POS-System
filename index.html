@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Stock Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 12px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+            background: #fff;
+        }
+
+        input[type="file"] {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #28a745, #34d058);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #218838, #2eb94e);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+        }
+
+        /* Add placeholder styling */
+        input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Insert Stock Data</h2>
+        <form id="stockForm">
+            <input type="text" id="category" name="category" placeholder="Category" required>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+            <input type="number" id="price" name="price" placeholder="Price" step="0.01" required>
+            <input type="file" id="image" name="image" required>
+            <button type="button" onclick="insertData()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function insertData() {
+            var formData = new FormData();
+            formData.append("category", $("#category").val());
+            formData.append("name", $("#name").val());
+            formData.append("price", $("#price").val());
+            formData.append("image", $("#image")[0].files[0]);
+
+            $.ajax({
+                url: "insert.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert(response);
+                    $("#stockForm")[0].reset();
+                },
+                error: function() {
+                    alert("Error submitting data.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
